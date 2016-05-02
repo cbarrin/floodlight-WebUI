@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -54,7 +54,7 @@
             border: 1px solid #ccc;
             border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: 8px;
-            box-shadow: 0 5px 10px rgba(0,0,0,.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
         }
 
         .tt-suggestion {
@@ -119,7 +119,6 @@
         </div>
         <!-- /.row -->
 
-
         <div class="row">
             <div class="col-md-1">
                 <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addRuleModal">Add New</a>
@@ -130,9 +129,7 @@
             <br/><br/>
         </div>
 
-
         <div class="row">
-
 
             <div class="col-lg-12">
                 <div class="panel panel-primary">
@@ -150,19 +147,13 @@
             </div>
         </div>
 
-
         <!-- Add Rule-->
-        <div class="modal fade" tabindex="-1" id="addRuleModal" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" id="roleModalCloseButton2" data-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel2">Create</h4>
-                    </div>
-                    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-green">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
                         <div class="form">
                             <div class="form-group">
                                 <label>Switch</label>
@@ -216,7 +207,6 @@
                                 <input class="form-control" type="text" id="hard_timeout" placeholder="">
                             </div>
 
-
                             <div class="form-group">
                                 <label>Actions</label>
                                 <div id="actions-group">
@@ -227,17 +217,49 @@
                             <button type="submit" class="btn btn-default" id="btnAddAction">Add Action</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnCancelAddRule" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                    <div class="panel-footer">
+                        <button type="button" id="btnCancelAddRule" class="btn btn-sm btn-default">
+                            Cancel
+                        </button>
                         <button type="button" id="btnAddRule" class="btn btn-sm btn-primary">Create</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
-    <!-- /#page-wrapper -->
+
+    <!-- Choose Switch Modal -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="choose-switch-modal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="switch-modal-close-btn" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="switch-modal-title">Choose Switch</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <select name="Switch" id="switch-dropdown" class="form-control">
+                            <option>Switch</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-xs btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="switch-modal-choose-btn" class="btn btn-xs btn-primary"
+                            data-dismiss="modal">Choose
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /#page-wrapper -->
 </div>
 <!-- /#wrapper -->
 <!-- jQuery -->
@@ -272,86 +294,40 @@
 </script>
 
 <script>
-    var test_matches = {
-        "array": [
-            {"key" : "in_port",
-                "value" : "number",
-                "prereq" : [],
-                "coreq" : [],
-                "version" : "all",
-                "notes" : "Switch port on which the packet is received"
-            },
-            {"key" : "eth_type",
-                "value" : "number",
-                "prereq" : [],
-                "coreq" : [],
-                "version" : "all",
-                "notes" : "Can be hex or decimal"
-            },
-            {"key" : "arp_tpa",
-                "value" : "IPv4 address",
-                "prereq" : ["eth_type : 0x0806"],
-                "coreq" : ["d", "e", "f"],
-                "version" : "12",
-                "notes" : "xx.xx.xx.xx"
-            }
-        ]
-    };
-
-    function buildMatches(matchobject) {
-        var matches = [];
-        $.each(matchobject.array, function(i, match) {
-            matches.push(match.key);
-        });
-        console.log(matches);
-        return matches;
-    }
-    //console.log(buildMatches(test_matches));
-
-    var substringMatcher = function(strs) {
-        return function findMatches(q, cb) {
-            var matches, substringRegex;
-
-            // an array that will be populated with substring matches
-            matches = [];
-
-            // regex used to determine if a string contains the substring `q`
-            substrRegex = new RegExp(q, 'i');
-
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function(i, str) {
-                if (substrRegex.test(str)) {
-                    matches.push(str);
-                }
-            });
-
-            cb(matches);
-        };
-    };
-
-    $('.typeahead').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'Matches',
-                source: substringMatcher(buildMatches(test_matches))
-            });
-</script>
-
-<script>
     var ipaddress = $.cookie('cip');
     if (ipaddress == null || ipaddress == "") window.location.href = "login.html";
     var restport = $.cookie('cport');
     if (restport == null || restport == "") window.location.href = "login.html";
+    var sId = "";
 
-    var sId = getQueryParameterByName("macAddress");
-    $("#divSId").html("(" + sId + ")");
-    $('#switch').val(sId);
+    $(document).ready(function () {
+        $.ajax({
+            url    : "http://" + ipaddress + ":" + restport + "/wm/core/controller/switches/json",
+            success: function (data) {
+                $("#switch-dropdown").get(0).options.length = 0;
+                $("#switch-dropdown").get(0).options[0] = new Option("Select Switch", "-1");
 
-    $('#btnCancelAddRule').click(function() {
+                $.each(data, function (index, item) {
+                    $("#switch-dropdown").get(0).options[$("#switch-dropdown").get(0).options.length] = new Option(item.switchDPID, item.switchDPID);
+                });
+            },
+            error  : function () {
+                alert("Failed to load switches");
+            }
+        });
+
+        $('#choose-switch-modal').modal('show');
+
+    });
+
+    $('#switch-modal-choose-btn').click(function () {
+        sId = $("#switch-dropdown").val();
+        $("#divSId").html("(" + sId + ")");
+        $('#switch').val(sId);
+        GetFlows();
+    });
+
+    $('#btnCancelAddRule').click(function () {
         resetSFPModal(); // Make sure action and match lists go back to normal
     });
 
@@ -370,7 +346,6 @@
         if ($("#rbActive").is(':checked')) active = "true";
         else active = "false";
 
-
         resetSFPModal(); // Make sure action and match lists go back to normal
 
         if (switchid != "" && name != "") {
@@ -382,9 +357,9 @@
 
             new PNotify({
                 title: 'Enter a value!',
-                text: 'Please enter a valid value!',
-                type: 'warning',
-                hide: true
+                text : 'Please enter a valid value!',
+                type : 'warning',
+                hide : true
             });
         }
     });
@@ -398,7 +373,6 @@
         var html = '<input class="form-control" type="text" id="actions" placeholder="Action">';
         $('#actions-group').html(html);
     }
-
 
     function AddFirewallRule(switchid, name, priority, table, idle_timeout, hard_timeout, cookie, in_port, actions, active) {
         var postData = "";
@@ -417,18 +391,18 @@
         postData += '}';
 
         $.ajax({
-            type: "POST",
+            type    : "POST",
             dataType: 'json',
-            url: "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/json",
-            data: postData,
-            success: function (data) {
+            url     : "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/json",
+            data    : postData,
+            success : function (data) {
 
                 if (data["status"] == "Entry pushed") {
                     new PNotify({
                         title: 'Flow entry added!',
-                        text: 'Flow entry successfully added.',
-                        type: 'success',
-                        hide: true
+                        text : 'Flow entry successfully added.',
+                        type : 'success',
+                        hide : true
                     });
 
                     GetFlows();
@@ -437,28 +411,24 @@
 
                     new PNotify({
                         title: 'Error Occured.',
-                        text: data["status"],
-                        type: 'error',
-                        hide: true
+                        text : data["status"],
+                        type : 'error',
+                        hide : true
                     });
                 }
 
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error   : function (jqXHR, textStatus, errorThrown) {
                 alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
             }
         });
 
     }
 
-
-    GetFlows();
-
     function GetFlows() {
 
-
         $.ajax({
-            url: "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/list/" + sId + "/json",
+            url    : "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/list/" + sId + "/json",
             success: function (data) {
                 var obj = data["" + sId + ""];
 
@@ -484,7 +454,6 @@
                         if (obj[i].hasOwnProperty(propName)) {
                             var objValue = obj[i][propName];
 
-
                             html += "<tr><td>" + propName + "</td>"
                                     + "<td>" + objValue["command"] + "</td>"
                                     + "<td>" + objValue["cookie"] + "</td>"
@@ -504,49 +473,45 @@
 
                 html += "  </tbody></table>";
 
-
                 $("#flowTable").html("");
                 $("#flowTable").html(html);
 
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error  : function (jqXHR, textStatus, errorThrown) {
                 alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
             }
         });
 
-
     }
-
 
     function DeleteRule(name) {
 
         if (confirm("Flow entry will be deleted. To Continue press 'OK'!")) {
 
             $.ajax({
-                type: "DELETE",
+                type    : "DELETE",
                 dataType: 'json',
-                url: "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/json",
-                data: '{ "name":' + "\"" + name + "\"" + '}',
-                success: function (data) {
+                url     : "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/json",
+                data    : '{ "name":' + "\"" + name + "\"" + '}',
+                success : function (data) {
 
                     new PNotify({
                         title: 'Flow entry deleted!',
-                        text: 'Flow entry successfully deleted.',
-                        type: 'success',
-                        hide: true
+                        text : 'Flow entry successfully deleted.',
+                        type : 'success',
+                        hide : true
                     });
 
                     GetFlows();
 
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error   : function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
                 }
             });
         }
 
     }
-
 
     $("#btnDeleteAll").click(function () {
 
@@ -554,28 +519,26 @@
 
     });
 
-
     function DeleteAll(switchId) {
-
 
         if (confirm("All flow entries will be deleted. To Continue press 'OK'!")) {
 
             $.ajax({
-                type: "GET",
-                url: "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/clear/" + switchId + "/json",
+                type   : "GET",
+                url    : "http://" + ipaddress + ":" + restport + "/wm/staticflowpusher/clear/" + switchId + "/json",
                 success: function (data) {
 
                     new PNotify({
                         title: 'All flow entries deleted!',
-                        text: 'All flow entries successfully deleted.',
-                        type: 'success',
-                        hide: true
+                        text : 'All flow entries successfully deleted.',
+                        type : 'success',
+                        hide : true
                     });
 
                     GetFlows();
 
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
+                error  : function (jqXHR, textStatus, errorThrown) {
                     alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
                 }
             });
@@ -583,7 +546,79 @@
 
     }
 
+</script>
 
+<script>
+    var test_matches = {
+        "array": [
+            {
+                "key"    : "in_port",
+                "value"  : "number",
+                "prereq" : [],
+                "coreq"  : [],
+                "version": "all",
+                "notes"  : "Switch port on which the packet is received"
+            },
+            {
+                "key"    : "eth_type",
+                "value"  : "number",
+                "prereq" : [],
+                "coreq"  : [],
+                "version": "all",
+                "notes"  : "Can be hex or decimal"
+            },
+            {
+                "key"    : "arp_tpa",
+                "value"  : "IPv4 address",
+                "prereq" : ["eth_type : 0x0806"],
+                "coreq"  : ["d", "e", "f"],
+                "version": "12",
+                "notes"  : "xx.xx.xx.xx"
+            }
+        ]
+    };
+
+    function buildMatches(matchobject) {
+        var matches = [];
+        $.each(matchobject.array, function (i, match) {
+            matches.push(match.key);
+        });
+        console.log(matches);
+        return matches;
+    }
+    //console.log(buildMatches(test_matches));
+
+    var substringMatcher = function (strs) {
+        return function findMatches(q, cb) {
+            var matches, substringRegex;
+
+            // an array that will be populated with substring matches
+            matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function (i, str) {
+                if (substrRegex.test(str)) {
+                    matches.push(str);
+                }
+            });
+
+            cb(matches);
+        };
+    };
+
+    $('.typeahead').typeahead({
+                hint     : true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name  : 'Matches',
+                source: substringMatcher(buildMatches(test_matches))
+            });
 </script>
 </body>
 </html>
